@@ -267,14 +267,14 @@ int main(){
     const int x = 100, y = 8;
     student StArr[x];
     string subjects[y] = {"fizika", "filosofiya", "fizkultura","informatica","programmirovanie","angliyskiy","albebra","matbanan"};
-   /* stdInFile(subjects, y);*/
+   stdInFile(subjects, y);
     dottedLine();
 
     stdOutFile(StArr,countStd(),y);
     StdOutCon(StArr,countStd(),subjects,y);
     dottedLine();
 
-    /*while(cin.get() != '\n');
+    while(cin.get() != '\n');
     StdInfChange(StArr, countStd(), subjects, y);
     dottedLine();
 
@@ -284,7 +284,7 @@ int main(){
 
     while(cin.get() != '\n');
     TopValue(StArr,countStd(),y);
-    dottedLine();*/
+    dottedLine();
 
     SortingByGender(StArr,countStd(),subjects, y);
     dottedLine();
