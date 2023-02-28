@@ -4,6 +4,10 @@
 #include <vector>
 #include <map>
 using namespace std;
+
+bool numCheck(int x){
+    return (x >= 0) && (x <= 30);
+}
 int countStd(){
     ifstream database;
     database.open(R"(C:\\Users\\aleks\\CLionProjects\\test\\students.txt)");
@@ -191,7 +195,7 @@ void TopValue(student *p, int n, int len){
     }
 }
 void dottedLine(){
-    cout <<'\n'<<"------------------------------------------------------------------------------------"<<'\n';
+    cout <<'\n'<<"---------------------------------------------------------------------------------------------------------------------"<<'\n';
 }
 void SortingByGender(student *p, int n, string *k,int len){
     vector <student *> mGender;
@@ -202,6 +206,62 @@ void SortingByGender(student *p, int n, string *k,int len){
     }
     cout <<'\t'<< "Number of male students = "<< mGender.size() <<'\n'<<'\n';
     cout <<'\t'<< "Number of female students = "<< wGender.size() <<'\n'<<'\n';
+}
+void SortingByPerfomance(student *p, int n, string *k,int len){
+    vector <student *> Grade_3;
+    vector <student *> Grade_4;
+    vector <student *> Grade_5;
+    for(student *begin = p; p < begin + n; p++){
+        bool flag_3 = false, flag_4 = false;
+        for(int i = 0; i < len; i++){
+            if (p->Session[i] == 3) {
+                flag_3 = true;
+                break;
+            }
+            if (p->Session[i] == 4){
+                flag_4 = true;
+            }
+        }
+        if((!flag_3) && (!flag_4)) Grade_5.push_back(p);
+        else{
+            if((!flag_3) && (flag_4)) Grade_4.push_back(p);
+            else
+                Grade_3.push_back(p);
+        }
+    }
+    cout <<'\t'<<'\t' << "Students which got only 5s" <<'\n'<<'\n';
+    for(student * j : Grade_5){
+        StdOutCon(j,1,k,len);
+    }
+    cout <<'\t'<<'\t' << "Students which got 4s and 5s" <<'\n'<<'\n';
+    for(student * j : Grade_4){
+        StdOutCon(j,1,k,len);
+    }
+    cout <<'\t'<<'\t' << "Students which did not get scholarship" <<'\n'<<'\n';
+    for(student * j : Grade_3){
+        StdOutCon(j,1,k,len);
+    }
+}
+void InfByNumber(student *p, int n, string *k,int len){
+    short int Number;
+    vector <student *> NumList;
+    cout <<'\t'<<'\t'<< "Enter the number in group"<<'\n'<<'\n';
+    cin >> Number;
+    while(!numCheck(Number)){
+        cout <<'\t'<<'\t'<< "This number cannot be, enter again"<<'\n'<<'\n';
+        cin >> Number;
+    }
+    for(student * begin = p; p < begin + n; p++){
+        if (p->numInGroup == Number) NumList.push_back(p);
+    }
+    if(!NumList.empty()){
+        cout << "Students with number " << Number <<" :"<<'\n'<<'\n';
+        for(student * j : NumList){
+            StdOutCon(j,1,k,len);
+        }
+    }
+    else cout <<'\t'<<'\t'<< "No students with this number were found"<<'\n'<<'\n';
+
 }
 int main(){
     const int x = 100, y = 8;
@@ -214,7 +274,7 @@ int main(){
     StdOutCon(StArr,countStd(),subjects,y);
     dottedLine();
 
-    while(cin.get() != '\n');
+    /*while(cin.get() != '\n');
     StdInfChange(StArr, countStd(), subjects, y);
     dottedLine();
 
@@ -224,9 +284,16 @@ int main(){
 
     while(cin.get() != '\n');
     TopValue(StArr,countStd(),y);
-    dottedLine();
+    dottedLine();*/
 
     SortingByGender(StArr,countStd(),subjects, y);
+    dottedLine();
+
+    SortingByPerfomance(StArr,countStd(),subjects, y);
+    dottedLine();
+
+    while(cin.get() != '\n');
+    InfByNumber(StArr,countStd(),subjects, y);
     dottedLine();
 
     system("pause");
