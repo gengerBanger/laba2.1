@@ -6,11 +6,30 @@
 using namespace std;
 
 bool numCheck(int x){
-    return (x >= 0) && (x <= 30);
+    return (x > 0) && (x <= 30);
+}
+bool gradeCheck(int x){
+    return (x >= 3) && (x <= 5);
+}
+bool sexCheck(char x){
+    return (x == 'M') || (x == 'W');
+}
+bool groupCheck(int x){
+    return (x >= 0) && (x < 10000);
+}
+struct student{
+    string FullName;
+    char Sex;
+    short int GroupNum;
+    short int numInGroup;
+    short int Session[8];
+};
+void dottedLine(){
+    cout <<'\n'<<"---------------------------------------------------------------------------------------------------------------------"<<'\n';
 }
 int countStd(){
     ifstream database;
-    database.open(R"(C:\\Users\\aleks\\CLionProjects\\test\\students.txt)");
+    database.open(R"(C:\\Users\\aleks\\CLionProjects\\laba2.1\\students.txt)");
     if (database.is_open())
     {
         int temp = 0;
@@ -27,17 +46,10 @@ int countStd(){
     }
     else return 0;
 }
-struct student{
-    string FullName;
-    char Sex;
-    short int GroupNum;
-    short int numInGroup;
-    short int Session[8];
-};
 void stdOutFile(student *p, int n, int len){
     student *begin = p;
     ifstream database;
-    database.open(R"(C:\\Users\\aleks\\CLionProjects\\test\\students.txt)");
+    database.open(R"(C:\\Users\\aleks\\CLionProjects\\laba2.1\\students.txt)");
     for(;p < begin + n; p++){
         getline(database,p->FullName, '\n');
         /*while(p->FullName == ""){
@@ -62,32 +74,45 @@ void stdInFile(string *p, int len){
     student newStud{};
     cout << "enter full name ";
     getline(cin,newStud.FullName);
-    cout << "\nenter sex";
+    cout << "\nenter sex ";
     cin >> newStud.Sex;
-    cout << "\nenter group number";
+    while(!sexCheck(newStud.Sex)){
+        cout <<'\t'<<'\t'<< "Invalid data, try again" <<'\n' <<'\n';
+        cout << "\nenter sex ";
+        cin >> newStud.Sex;
+    }
+    cout << "\nenter group number " ;
     cin >> newStud.GroupNum;
-    cout << "\nenter number in group";
+    while(!groupCheck(newStud.GroupNum)){
+        cout <<'\t'<<'\t'<< "Invalid data, try again" <<'\n' <<'\n';
+        cout << "\nenter group number " ;
+        cin >> newStud.GroupNum;
+    }
+    cout << "\nenter number in group ";
     cin >> newStud.numInGroup;
+    while(!numCheck(newStud.numInGroup)){
+        cout <<'\t'<<'\t'<< "Invalid data, try again" <<'\n' <<'\n';
+        cout << "\nenter number in group ";
+        cin >> newStud.numInGroup;
+    }
     for (int i = 0; i < len; i++, pSub++){
-        cout << "enter "<< *pSub;
+        cout << "enter "<< *pSub <<' ';
         cin >> newStud.Session[i];
-        if (newStud.Session[i] < 3){
-            cout << "Unable to add student because he should be excluded";
-            satisfaction = false;
-            break;
+        while(!gradeCheck(newStud.Session[i])){
+            cout <<'\t'<<'\t'<< "Invalid data, try again" <<'\n' <<'\n';
+            cout << "enter "<< *pSub <<' ';
+            cin >> newStud.Session[i];
         }
     }
-    if(satisfaction){
-        ofstream database;
-        database.open(R"(C:\\Users\\aleks\\CLionProjects\\test\\students.txt)", ios::app);
-        database << newStud.FullName << '\n'<< newStud.Sex << '\n'<< newStud.GroupNum << '\n'
+    ofstream database;
+    database.open(R"(C:\\Users\\aleks\\CLionProjects\\laba2.1\\students.txt)", ios::app);
+    database << newStud.FullName << '\n'<< newStud.Sex << '\n'<< newStud.GroupNum << '\n'
                 << newStud.numInGroup << '\n';
-        for(int i = 0; i < len; i++) {
-            database << newStud.Session[i] << '\n';
-        }
-        database << '\n';
-        database.close();
+    for(int i = 0; i < len; i++) {
+        database << newStud.Session[i] << '\n';
     }
+    database << '\n';
+    database.close();
 }
 void StdOutCon(student *p, int n, string *k, int len){
     student *beginStd = p;
@@ -194,9 +219,6 @@ void TopValue(student *p, int n, int len){
         cout <<'\t' << i <<')'<<' '<< iter->second<<"   "<<iter->first <<'\n';
     }
 }
-void dottedLine(){
-    cout <<'\n'<<"---------------------------------------------------------------------------------------------------------------------"<<'\n';
-}
 void SortingByGender(student *p, int n, string *k,int len){
     vector <student *> mGender;
     vector <student *> wGender;
@@ -224,7 +246,7 @@ void SortingByPerfomance(student *p, int n, string *k,int len){
         }
         if((!flag_3) && (!flag_4)) Grade_5.push_back(p);
         else{
-            if((!flag_3) && (flag_4)) Grade_4.push_back(p);
+            if((!flag_3) && flag_4) Grade_4.push_back(p);
             else
                 Grade_3.push_back(p);
         }
@@ -267,7 +289,7 @@ int main(){
     const int x = 100, y = 8;
     student StArr[x];
     string subjects[y] = {"fizika", "filosofiya", "fizkultura","informatica","programmirovanie","angliyskiy","albebra","matbanan"};
-   stdInFile(subjects, y);
+    stdInFile(subjects, y);
     dottedLine();
 
     stdOutFile(StArr,countStd(),y);
@@ -281,13 +303,16 @@ int main(){
     while(cin.get() != '\n');
     GroupSearch(StArr,countStd(),subjects, y);
     dottedLine();
+    cin.get();
 
     while(cin.get() != '\n');
     TopValue(StArr,countStd(),y);
     dottedLine();
+    cin.get();
 
     SortingByGender(StArr,countStd(),subjects, y);
     dottedLine();
+    cin.get();
 
     SortingByPerfomance(StArr,countStd(),subjects, y);
     dottedLine();
