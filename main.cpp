@@ -4,7 +4,13 @@
 #include <vector>
 #include <map>
 using namespace std;
-
+struct student{
+    string FullName;
+    char Sex;
+    short int GroupNum;
+    short int numInGroup;
+    short int Session[8];
+};
 bool numCheck(int x){
     return (x > 0) && (x <= 30);
 }
@@ -17,13 +23,6 @@ bool sexCheck(char x){
 bool groupCheck(int x){
     return (x >= 0) && (x < 10000);
 }
-struct student{
-    string FullName;
-    char Sex;
-    short int GroupNum;
-    short int numInGroup;
-    short int Session[8];
-};
 void dottedLine(){
     cout <<'\n'<<"---------------------------------------------------------------------------------------------------------------------"<<'\n';
 }
@@ -46,7 +45,7 @@ int countStd(){
     }
     else return 0;
 }
-void stdOutFile(student *p, int n, int len){
+void stdOutFile(student *p, int n,int len){
     student *begin = p;
     ifstream database;
     database.open(R"(C:\\Users\\aleks\\CLionProjects\\laba2.1\\students.txt)");
@@ -68,10 +67,12 @@ void stdOutFile(student *p, int n, int len){
     }
     database.close();
 }
-void stdInFile(string *p, int len){
+void stdInFile(string *p,int len){
     string *pSub = p;
-    bool satisfaction = true;
+    bool key;
     student newStud{};
+    student *p_1 = &newStud;
+    while(cin.get() != '\n');
     cout << "enter full name ";
     getline(cin,newStud.FullName);
     cout << "\nenter sex ";
@@ -113,7 +114,10 @@ void stdInFile(string *p, int len){
     }
     database << '\n';
     database.close();
-}
+    cout << "\t\tDo you want to enter data for a new student?\n1)Yes\n0)No\n";
+    cin >> key;
+    if (key) stdInFile(p,len);
+ }
 void StdOutCon(student *p, int n, string *k, int len){
     student *beginStd = p;
     string *beginSes = k;
@@ -287,9 +291,13 @@ void InfByNumber(student *p, int n, string *k,int len){
 }
 int main(){
     const int x = 100, y = 8;
+    bool key;
     student StArr[x];
     string subjects[y] = {"fizika", "filosofiya", "fizkultura","informatica","programmirovanie","angliyskiy","albebra","matbanan"};
-    stdInFile(subjects, y);
+    stdOutFile(StArr,countStd(),y);
+    cout << "\t\tDo you want to enter data for a new student?\n1)Yes\n0)No\n";
+    cin >> key;
+    if (key) stdInFile(subjects, y);
     dottedLine();
 
     stdOutFile(StArr,countStd(),y);
