@@ -136,8 +136,9 @@ void StdOutCon(student *p, int n, string *k, int len){
 void StdInfChange(student *p, int n, string *k,int len){
     student *beginStd = p, *CheckResult;
     string Name;
-    bool check = false;
+    bool check = false, key_1;
     int key;
+    while(cin.get() != '\n');
     cout << "Enter the name of student whose information you want to change"<<'\n';
     getline(cin,Name,'\n');
     for (; p < beginStd + n; p++){
@@ -184,7 +185,10 @@ void StdInfChange(student *p, int n, string *k,int len){
         cout << '\n';
         StdOutCon(CheckResult, 1, k, len);
     }
-    else cout <<"Student not found";
+    else cout <<"\tStudent not found\n";
+    cout << "\t\tDo you want to change information of student?\n1)Yes\n0)No\n";
+    cin >> key_1;
+    if (key_1) StdInfChange(beginStd, countStd(), k, len);
 }
 void GroupSearch(student *p, int n, string *k, int len){
     student *beginStd = p;
@@ -305,7 +309,9 @@ int main(){
     dottedLine();
 
     while(cin.get() != '\n');
-    StdInfChange(StArr, countStd(), subjects, y);
+    cout << "\t\tDo you want to change information of student?\n1)Yes\n0)No\n";
+    cin >> key;
+    if (key )StdInfChange(StArr, countStd(), subjects, y);
     dottedLine();
 
     while(cin.get() != '\n');
